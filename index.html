@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>School Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      background: linear-gradient(to right, #e6f0ff, #f8fbff);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .header {
+      background-color: #002b5c;
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      margin-bottom: 2.5rem;
+    }
+
+    .header img {
+      height: 90px;
+    }
+
+    h2 {
+      color: #002b5c;
+      border-left: 5px solid #004080;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    input.form-control {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      transition: box-shadow 0.2s;
+    }
+
+    input.form-control:focus {
+      box-shadow: 0 0 5px rgba(0, 91, 187, 0.4);
+      border-color: #005bbb;
+    }
+
+    .btn {
+      border-radius: 8px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    .table {
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .table th {
+      background-color: #005bbb;
+      color: white;
+      text-align: center;
+    }
+
+    .table td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .list-group-item {
+      border: none;
+      border-bottom: 1px solid #eee;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+<div class="container my-5">
+  <div class="header">
+    <img src="111-removebg-preview.png" alt="School Logo" class="mb-3">
+    <h1>🏫 School Management </h1>
+    <p>Harvard</p>
+  </div>
+
+  <!-- Student Information -->
+  <section class="mb-5">
+    <div class="card">
+      <h2>📘 Student Information</h2>
+      <form id="student-form" class="mb-3">
+        <input class="form-control mb-2" id="full-name" placeholder="Full Name" required>
+        <input class="form-control mb-2" id="student-id" placeholder="Student ID" required>
+        <input class="form-control mb-2" id="address" placeholder="Address" required>
+        <input class="form-control mb-2" id="email" placeholder="Email" required>
+        <input class="form-control mb-2" id="course" placeholder="Course" required>
+        <button type="submit" class="btn btn-success w-100">Add Student</button>
+      </form>
+      <ul id="student-list" class="list-group"></ul>
+    </div>
+  </section>
+
+  <!-- Book Inventory -->
+  <section class="mb-5">
+    <div class="card">
+      <h2>📚 Book Inventory</h2>
+      <form id="book-form" class="mb-3">
+        <input class="form-control mb-2" id="book-title" placeholder="Book Title" required>
+        <input class="form-control mb-2" id="author" placeholder="Author" required>
+        <input class="form-control mb-2" id="isbn" placeholder="ISBN" required>
+        <input class="form-control mb-2" id="quantity" type="number" placeholder="Quantity" required>
+        <button type="submit" class="btn btn-info w-100">Add Book</button>
+      </form>
+      <ul id="book-list" class="list-group"></ul>
+    </div>
+  </section>
+
+  <!-- Record Table -->
+  <section class="mb-5">
+    <div class="card">
+      <h2>📑 Records</h2>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Username</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody id="record-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Receipt Log -->
+  <section class="mb-5">
+    <div class="card">
+      <h2>🧾 Receipts</h2>
+      <ul id="receipt-log" class="list-group"></ul>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <p>&copy; 2025 School Management System. All rights reserved.</p>
+</footer>
+
+<script>
+  function addToRecordTable(id = '', name = '', address = '', username = '', email = '') {
+    const tableBody = document.getElementById('record-table-body');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${id}</td>
+      <td>${name}</td>
+      <td>${address}</td>
+      <td>${username}</td>
+      <td>${email}</td>
+    `;
+    tableBody.appendChild(row);
+  }
+
+  function addReceipt(message) {
+    const log = document.getElementById('receipt-log');
+    const item = document.createElement('li');
+    item.className = 'list-group-item';
+    const now = new Date();
+    item.textContent = `${now.toLocaleString()}: ${message}`;
+    log.prepend(item); // show newest on top
+  }
+
+  // Student Info Submission
+  document.getElementById("student-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const name = document.getElementById("full-name").value;
+    const id = document.getElementById("student-id").value;
+    const email = document.getElementById("email").value;
+    const address = document.getElementById("address").value;
+    const course = document.getElementById("course").value;
+    const list = document.getElementById("student-list");
+
+    const item = document.createElement("li");
+    item.className = "list-group-item";
+    item.textContent = `${name} (${id}) - ${course} - ${email}`;
+    list.appendChild(item);
+
+    addToRecordTable(id, name, address, course, email);
+    addReceipt(`Student added: ${name} (${id}) in course ${course}`);
+    this.reset();
+  });
+
+  // Book Info Submission
+  document.getElementById("book-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const title = document.getElementById("book-title").value;
+    const author = document.getElementById("author").value;
+    const isbn = document.getElementById("isbn").value;
+    const qty = document.getElementById("quantity").value;
+    const list = document.getElementById("book-list");
+
+    const item = document.createElement("li");
+    item.className = "list-group-item";
+    item.textContent = `${title} by ${author} | ISBN: ${isbn} | Qty: ${qty}`;
+    list.appendChild(item);
+
+    addToRecordTable(isbn, title, '', 'Book Entry', '');
+    addReceipt(`Book added: ${title} by ${author}, ISBN: ${isbn}, Qty: ${qty}`);
+    this.reset();
+  });
+</script>
+</body>
+</html>
